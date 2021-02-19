@@ -8,4 +8,4 @@ class Solution:
                 l+=1
                 nums[l] = nums[i]
 
-        return l+
+        return l+1
