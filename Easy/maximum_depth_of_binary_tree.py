@@ -5,13 +5,48 @@
 #         self.left = left
 #         self.right = right
 
+from collections import deque
+
 class Solution:
+
     def maxDepth(self, root: TreeNode) -> int:
-        if not root:
+        return self.__iterativeMaxDepth(root)
+
+
+    def __recursiveMaxDepth(self, tree: TreeNode) -> int:
+        if not tree:
             return 0
-        else:
-            leftHeight = self.maxDepth(root.left)
-            rightHeight = self.maxDepth(root.right)
+
+        leftHeight = self.__recursiveMaxDepth(tree.left)
+        rightHeight = self.__recursiveMaxDepth(tree.right)
+        
+        return max(leftHeight, rightHeight)+1
+
+
+    def __iterativeMaxDepth(self, tree: TreeNode) -> int:
+        if not tree:
+            return 0
+
+        queue = deque()
+        queue.append(tree)
+        height = 0
+
+        while True:
             
-            return max(leftHeight, rightHeight)+1
+            nodeCount = len(queue)
+            if nodeCount == 0:
+                return height
+
+            height+=1
+
+            while nodeCount:
+
+                node = queue.popleft()
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+
+                nodeCount-=1
 
