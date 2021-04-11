@@ -4,17 +4,31 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-
 from collections import deque
 
 class Solution:
+    
     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-        self.targetSum = targetSum
-        self.path_sum = self.__iterativePath(root)
-        if self.path_sum:
-            return self.path_sum == self.targetSum
-        else:
+        # Iterative
+        # self.targetSum = targetSum
+        # self.path_sum = self.__iterativePath(root)
+        # if self.path_sum:
+        #     return self.path_sum == self.targetSum
+        # else:
+        #     return False
+        
+        # Recursive
+        return self.__recursivePath(root, targetSum)
+
+        
+    def __recursivePath(self, tree: TreeNode, targetSum: int) -> bool:
+        if not tree:
             return False
+
+        if not tree.left and not tree.right and tree.val == targetSum:
+            return True
+
+        return self.hasPathSum(tree.left, targetSum - tree.val) or self.hasPathSum(tree.right, targetSum - tree.val)
 
     def __iterativePath(self, tree: TreeNode) -> int:
         if not tree:
@@ -35,12 +49,8 @@ class Solution:
 
             if node.left:
                 left_sum = val + node.left.val
-
-                if left_sum <= self.targetSum:
-                    queue.append((node.left, left_sum))
+                queue.append((node.left, left_sum))
 
             if node.right:
                 right_sum = val + node.right.val
-
-                if right_sum <= self.targetSum:
-                    queue.append((node.right, right_sum))
+                queue.append((node.right, right_sum))
